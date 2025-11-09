@@ -12,6 +12,7 @@ struct MarubatsuApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+            //CreateView()
         }
     }
 }
