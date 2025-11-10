@@ -69,15 +69,22 @@ struct CreateView: View {
                 EditButton()
             }
         }
+        // アプリ起動時に保存データを読み込む
+        .onAppear {
+            loadSavedQuizzes()
+        }
     }
+    
     //並び替えの関数
     func replaceRow(_ from: IndexSet, _ to: Int) {
         quizzesArray.move(fromOffsets: from, toOffset: to)
+        saveQuizzes()
     }
     
     // 削除の関数
     func deleteQuiz(offsets: IndexSet) {
         quizzesArray.remove(atOffsets: offsets)
+        saveQuizzes()
     }
     
     //問題追加（保存）の関数
@@ -111,6 +118,22 @@ struct CreateView: View {
             questionText = ""//テキストフィールドを空白に戻す
             quizzesArray = array //[既存問題 + 新問題]となった配列に更新
             print(array)
+        }
+    }
+    //保存処理
+    func saveQuizzes() {
+        let storeKey = "Quiz"
+        if let encodedQuizzes = try? JSONEncoder().encode(quizzesArray) {
+            UserDefaults.standard.set(encodedQuizzes, forKey: storeKey)
+        }
+    }
+    
+    //読み込み処理
+    func loadSavedQuizzes() {
+        let storeKey = "Quiz"
+        if let savedData = UserDefaults.standard.data(forKey: storeKey),
+           let decoded = try? JSONDecoder().decode([Quiz].self, from: savedData) {
+            quizzesArray = decoded
         }
     }
 }
