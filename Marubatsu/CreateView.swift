@@ -10,6 +10,7 @@ import SwiftUI
 struct CreateView: View {
     
     @Binding var quizzesArray: [Quiz] //回答画面で読み込んだ問題を受け取る
+    @Binding var currentQuestionNum: Int//「何問目」の値をわたす
     @State private var questionText = ""
     @State private var selectedAnswer = "O" //ピッカーで選ばれた解答を受け取る
     let answers = ["O", "X"] // ピッカーの選択肢
@@ -57,8 +58,9 @@ struct CreateView: View {
             List {
                 ForEach(quizzesArray) { quiz in
                     HStack {
-                        Text(quiz.question)
-                        Text(quiz.answer ? "○" : "×")
+                        Text("問題: \(quiz.question)")
+                        Spacer()
+                        Text("解答: \(quiz.answer ? "○" : "×")")
                     }
                 }
                 // 並び替え、削除
@@ -78,6 +80,7 @@ struct CreateView: View {
     //並び替えの関数
     func replaceRow(_ from: IndexSet, _ to: Int) {
         quizzesArray.move(fromOffsets: from, toOffset: to)
+        currentQuestionNum = 0//1問目に戻る
         saveQuizzes()
     }
     
