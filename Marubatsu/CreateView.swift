@@ -87,6 +87,7 @@ struct CreateView: View {
     // 削除の関数
     func deleteQuiz(offsets: IndexSet) {
         quizzesArray.remove(atOffsets: offsets)
+        currentQuestionNum = 0//1問目に戻る
         saveQuizzes()
     }
     
